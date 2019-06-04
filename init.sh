@@ -15,6 +15,7 @@ cat /template/15-lda.conf >> /etc/dovecot/conf.d/15-lda.conf
 cat /template/10-auth.conf > /etc/dovecot/conf.d/10-auth.conf
 cat /template/auth-sql.conf.ext > /etc/dovecot/conf.d/auth-sql.conf.ext
 cat /template/10-ssl.conf > /etc/dovecot/conf.d/10-ssl.conf
+cat /template/15-mailboxes.conf > /etc/dovecot/conf.d/15-mailboxes.conf
 
 echo "hosts = $DB_HOST:$DB_PORT" > /etc/postfix/mysql-virtual-alias-maps.cf
 echo "dbname = $DB_NAME" >> /etc/postfix/mysql-virtual-alias-maps.cf
