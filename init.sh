@@ -44,7 +44,7 @@ echo "driver = mysql" > /etc/dovecot/dovecot-sql.conf.ext
 echo "connect = host=$DB_HOST dbname=$DB_NAME user=$DB_USER password=$DB_PASS port=$DB_PORT" >> /etc/dovecot/dovecot-sql.conf.ext
 echo "default_pass_scheme = PBKDF2" >> /etc/dovecot/dovecot-sql.conf.ext
 echo "password_query = SELECT \`ta\`.\`email_username\` as \`username\`, \`ta\`.\`password\` as \`password\` FROM \`mail_user\` \`ta\` INNER JOIN \`mail_vdom\` \`td\` ON \`td\`.\`domain\`='%d' AND \`ta\`.\`domain_id\`=\`td\`.\`id\` WHERE \`ta\`.\`email_username\`='%n'" >> /etc/dovecot/dovecot-sql.conf.ext
-echo "user_query = SELECT 'vmail' as \`gid\`, 'vmail' as \`uid\` FROM \`mail_user\` \`ta\` INNER JOIN \`mail_vdom\` \`td\` ON \`td\`.\`domain\`='%d' AND \`ta\`.\`domain_id\`=\`td\`.\`id\` WHERE \`ta\`.\`email_username\`='%n'" >> /etc/dovecot/dovecot-sql.conf.ext
+echo "user_query = SELECT 'vmail' as \`gid\`, 'vmail' as \`uid\` CONCAT('/mail-storage/', \`mailbox_id\`) as \`home\` FROM \`mail_user\` \`ta\` INNER JOIN \`mail_vdom\` \`td\` ON \`td\`.\`domain\`='%d' AND \`ta\`.\`domain_id\`=\`td\`.\`id\` WHERE \`ta\`.\`email_username\`='%n'" >> /etc/dovecot/dovecot-sql.conf.ext
 
 chown vmail:vmail -R /mail-storage/
 

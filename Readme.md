@@ -20,7 +20,7 @@
 ```sql
 
 CREATE TABLE `mail_alas` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `domain_id` int(11) NOT NULL,
   `source` varchar(128) NOT NULL,
@@ -28,12 +28,13 @@ CREATE TABLE `mail_alas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `mail_vdom` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `domain` varchar(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `mail_user` (
-  `idx` int(11) NOT NULL,
+  `idx` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `mailbox_id` varchar(40) NOT NULL COMMENT 'UUID format',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `domain_id` int(11) NOT NULL,
   `email_username` varchar(128) NOT NULL,
@@ -42,26 +43,16 @@ CREATE TABLE `mail_user` (
 
 
 ALTER TABLE `mail_alas`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `source` (`domain_id`,`source`) USING BTREE;
 
 ALTER TABLE `mail_vdom`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `domain` (`domain`);
 
 ALTER TABLE `mail_user`
-  ADD PRIMARY KEY (`idx`),
   ADD UNIQUE KEY `uq_email` (`domain_id`,`email_username`);
-
-
-ALTER TABLE `mail_alas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `mail_vdom`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 ALTER TABLE `mail_user`
-  MODIFY `idx` int(11) NOT NULL AUTO_INCREMENT;
+  ADD CONSTRAINT FOREIGN KEY (`domain_id`) REFERENCES `mail_vdom`(`id`);
+
 
 ```
 

@@ -5,7 +5,6 @@ passdb {
 
 userdb {
   driver = sql
-  default_fields = home=/mail-storage/%u
   args = /etc/dovecot/dovecot-sql.conf.ext
 }
 
