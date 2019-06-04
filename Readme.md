@@ -2,6 +2,7 @@
 
 * 0.1.0 : Added a column `mailbox_id` to sql. (Mail will be store in /mail-storage/`mailbox_id`.)
 * 0.1.1 : Added default mailboxes (Trash, Sent, etc...)
+* 0.1.2 : Added auth method (login)
 
 ### Environment
 
