@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p /run/opendkim
+
 [[ "$DB_PORT" = "" ]] && DB_PORT=3306
 
 cat /template/main.cf > /etc/postfix/main.cf
@@ -77,9 +79,66 @@ else
 echo "user_query = ${DOVECOT_USER_QUERY}" >> /etc/dovecot/dovecot-sql.conf.ext
 fi
 
+# OPEN DKIM
+
+if [ -n "$DKIM_SELECTOR" ]; then
+
+cat > /etc/opendkim/opendkim.conf <<EOF
+BaseDirectory           /run/opendkim
+
+#LogWhy                 yes
+Syslog                  yes
+SyslogSuccess           yes
+
+Canonicalization        relaxed/simple
+
+Domain                  $MYDOMAIN
+Selector                $DKIM_SELECTOR
+KeyFile                 $DKIM_KEYFILE
+
+Socket                  inet:8891@localhost
+#Socket                 local:opendkim.sock
+
+ReportAddress           $POSTMASTER_ADDRESS
+SendReports             yes
+
+## Hosts to sign email for - 127.0.0.1 is default
+## See the OPERATION section of opendkim(8) for more information
+#
+# InternalHosts         192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12
+
+## For secondary mailservers - indicates not to sign or verify messages
+## from these hosts
+#
+# PeerList              X.X.X.X
+
+PidFile               /var/run/opendkim/opendkim.pid
+
+#KeyTable                /etc/opendkim/KeyTable
+#SigningTable            /etc/opendkim/SigningTable
+#ExternalIgnoreList      /etc/opendkim/TrustedHosts
+#InternalHosts           /etc/opendkim/TrustedHosts
+
+EOF
+
+fi
+
+USE_DKIM=""
+if [[ -n "$DKIM_SELECTOR" ]]; then
+	USE_DKIM=y
+	echo "" >> /etc/postfix/main.cf
+	cat >> /etc/postfix/main.cf <<EOF
+milter_default_action = accept
+milter_protocol = 2
+smtpd_milters=inet:localhost:8891
+non_smtpd_milters=inet:localhost:8891
+EOF
+fi
+
 chown vmail:vmail -R /mail-storage/
 
 /usr/sbin/syslog-ng
+[ "x$USE_DKIM" = "xy" ] && /usr/sbin/opendkim -u opendkim
 /usr/sbin/dovecot
 /usr/sbin/postfix start
 
@@ -87,6 +146,7 @@ while true
 do
 	rc_postfix=1
 	rc_dovecot=1
+	rc_opendkim=1
 	if [[ -f /var/spool/postfix/pid/master.pid ]]; then
 		ps -p $(cat /var/spool/postfix/pid/master.pid) >/dev/null
 		rc_postfix=$?
@@ -96,6 +156,18 @@ do
 		ps -p $(cat /var/run/dovecot/master.pid) >/dev/null
 		rc_dovecot=$?
 	fi
+	if [ "x$USE_DKIM" = "xy" ]; then	
+		if [[ -f /var/run/opendkim/opendkim.pid ]]; then
+			ps -p $(cat /var/run/opendkim/opendkim.pid) >/dev/null
+			rc_opendkim=$?
+		fi
+	
+		if [[ ! $rc_opendkim -eq 0 ]]; then
+			echo "Restart OpenDKIM"
+			/usr/sbin/opendkim -u opendkim
+		fi
+	fi
+
 	if [[ ! $rc_postfix -eq 0 ]] || [[ ! $rc_dovecot -eq 0 ]]; then
 		echo "POSTFIX CHECK RET : $rc_postfix"
 		echo "DOVECOT CHECK RET : $rc_dovecot"
