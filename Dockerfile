@@ -1,4 +1,4 @@
-FROM alpine:3.11.6
+FROM alpine:3.12
 MAINTAINER Joseph Lee <development@jc-lab.net>
 
 RUN adduser -D -g vmail -u 11000 vmail && \
