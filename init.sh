@@ -81,6 +81,8 @@ fi
 
 # OPEN DKIM
 
+TEMP_SECRET_DKIM_DIR=/tmp-dkim-secret
+
 if [ -n "$DKIM_SELECTOR" ]; then
 
 cat > /etc/opendkim/opendkim.conf <<EOF
@@ -94,7 +96,7 @@ Canonicalization        relaxed/simple
 
 Domain                  $MYDOMAIN
 Selector                $DKIM_SELECTOR
-KeyFile                 /tmp/secret-dkim/default.priv.key
+KeyFile                 $TEMP_SECRET_DKIM_DIR/default.priv.key
 
 Socket                  inet:8891@localhost
 #Socket                 local:opendkim.sock
@@ -133,11 +135,11 @@ milter_protocol = 2
 smtpd_milters=inet:localhost:8891
 non_smtpd_milters=inet:localhost:8891
 EOF
-	mkdir -p /tmp/secret-dkim
-	cp $DKIM_KEYFILE /tmp/secret-dkim/default.priv.key
-	chown root.opendkim -R /tmp/secret-dkim
-	chmod 750 /tmp/secret-dkim
-	chmod 440 /tmp/secret-dkim/default.priv.key
+	mkdir -p $TEMP_SECRET_DKIM_DIR
+	cp $DKIM_KEYFILE $TEMP_SECRET_DKIM_DIR/default.priv.key
+	chown root.opendkim -R $TEMP_SECRET_DKIM_DIR
+	chmod 750 $TEMP_SECRET_DKIM_DIR
+	chmod 440 $TEMP_SECRET_DKIM_DIR/default.priv.key
 fi
 
 chown vmail:vmail -R /mail-storage/
