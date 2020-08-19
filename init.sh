@@ -94,7 +94,7 @@ Canonicalization        relaxed/simple
 
 Domain                  $MYDOMAIN
 Selector                $DKIM_SELECTOR
-KeyFile                 $DKIM_KEYFILE
+KeyFile                 /tmp/secret-dkim/default.priv.key
 
 Socket                  inet:8891@localhost
 #Socket                 local:opendkim.sock
@@ -133,6 +133,11 @@ milter_protocol = 2
 smtpd_milters=inet:localhost:8891
 non_smtpd_milters=inet:localhost:8891
 EOF
+	mkdir -p /tmp/secret-dkim
+	cp $DKIM_KEYFILE /tmp/secret-dkim/default.priv.key
+	chown root.opendkim -R /tmp/secret-dkim
+	chmod 750 /tmp/secret-dkim
+	chmod 440 /tmp/secret-dkim/default.priv.key
 fi
 
 chown vmail:vmail -R /mail-storage/
