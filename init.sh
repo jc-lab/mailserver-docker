@@ -138,7 +138,7 @@ fi
 chown vmail:vmail -R /mail-storage/
 
 /usr/sbin/syslog-ng
-[ "x$USE_DKIM" = "xy" ] && /usr/sbin/opendkim -u opendkim
+[ "x$USE_DKIM" = "xy" ] && /usr/sbin/opendkim
 /usr/sbin/dovecot
 /usr/sbin/postfix start
 
@@ -164,7 +164,7 @@ do
 	
 		if [[ ! $rc_opendkim -eq 0 ]]; then
 			echo "Restart OpenDKIM"
-			/usr/sbin/opendkim -u opendkim
+			/usr/sbin/opendkim
 		fi
 	fi
 
