@@ -1,23 +1,26 @@
 ### Version history
 
-#### 0.1.0
-* Added a column `mailbox_id` to sql. (Mail will be store in /mail-storage/`mailbox_id`.)
-
-#### 0.1.1
-* Added default mailboxes (Trash, Sent, etc...)
-
-#### 0.1.2
-* Added auth method (login)
+#### 0.1.4
+* Base image change to alpine:3.12
+* support opendkim
 
 #### 0.1.3
 * Postfix version : postfix-3.4.9-r0
 * Dovecot version : dovecot-2.3.9.3-r0
-* smtp_tls_security_level change to 'dane' 13555f7073df12b44c23af4aa0f2e85ab417adce
-* fix smtpd_tls_exclude_ciphers 0e5f02ec58538ac90f27489065887e20488fe4db
-* Base image change to alpine:3.11.6 and update postfix and dovecot version 773ea8cb683bfa0801c2d884d323748c48340183 99a2cede58b9c0c08415da3cc006701d1b190d85
-* Logging to stdout (useful in Kubernetes) 9c02b03a6a57beb35af98190e0b676e6d2a64da9
-* support custom query with environment 14bdb5d32ca238dd806d6a530b82b8bebb535a1c
+* smtp\_tls\_security\_level change to 'dane'
+* fix smtpd\_tls\_exclude\_ciphers
+* Base image change to alpine:3.11.6 and update postfix and dovecot version
+* Logging to stdout (useful in Kubernetes)
+* support custom query with environment
 
+#### 0.1.2
+* Added auth method (login)
+
+#### 0.1.1
+* Added default mailboxes (Trash, Sent, etc...)
+
+#### 0.1.0
+* Added a column `mailbox_id` to sql. (Mail will be store in /mail-storage/`mailbox_id`.)
 
 ### Environment
 
@@ -31,7 +34,8 @@
 * DB_NAME : mailserver
 * DB_USER : mailserver
 * DB_PASS : password
-
+* DKIM_SELECTOR=202008
+* DKIM_KEYFILE=/dkim/202008.private
 
 
 ### SQL
