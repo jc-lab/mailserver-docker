@@ -10,6 +10,8 @@ echo "myhostname = $MYHOSTNAME" >> /etc/postfix/main.cf
 echo "mydomain = $MYDOMAIN" >> /etc/postfix/main.cf
 echo 'myorigin = $mydomain' >> /etc/postfix/main.cf
 echo "bounce_notice_recipient = $BOUNCE_NOTICE_RECIPIENT" >> /etc/postfix/main.cf
+cat /template/header_checks_submission > /etc/postfix/header_checks_submission
+
 cat /template/10-master.conf > /etc/dovecot/conf.d/10-master.conf
 cat /template/10-mail.conf > /etc/dovecot/conf.d/10-mail.conf
 echo "postmaster_address = $POSTMASTER_ADDRESS" > /etc/dovecot/conf.d/15-lda.conf
