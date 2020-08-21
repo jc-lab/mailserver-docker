@@ -1,5 +1,15 @@
 ### Version history
 
+#### 0.1.8
+* Deletes the Received header containing the client's personal information and sends it to the outside.
+  - example)
+```
+Received: from [192.168.12.34(client ip)] (server-domain.com [server-ip])
+	(Authenticated sender: test@test.com)
+	by server-domain.com (Postfix) with ESMTPSA id 1234
+	...
+```
+
 #### 0.1.4
 * Base image change to alpine:3.12
 * support opendkim
