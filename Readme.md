@@ -1,5 +1,8 @@
 ### Version history
 
+#### 0.1.9
+* Support customization (CUSTOM_FS_OVERRIDE_DIR, CUSTOM_INIT_SCRIPT_FILE)
+
 #### 0.1.8
 * Deletes the Received header containing the client's personal information and sends it to the outside.
   - example)
@@ -47,6 +50,20 @@ Received: from [192.168.12.34(client ip)] (server-domain.com [server-ip])
 * DKIM_SELECTOR=202008
 * DKIM_KEYFILE=/dkim/202008.private
 
+* CUSTOM_FS_OVERRIDE_DIR
+* CUSTOM_INIT_SCRIPT_FILE
+
+```
+if [ -n "$CUSTOM_FS_OVERRIDE_DIR" ]; then
+       cp -rf $CUSTOM_FS_OVERRIDE_DIR/* /
+fi
+
+if [ -x "$CUSTOM_INIT_SCRIPT_FILE" ]; then
+       $CUSTOM_INIT_SCRIPT_FILE
+elif [ -n "$CUSTOM_INIT_SCRIPT_FILE" ]; then
+       . $CUSTOM_INIT_SCRIPT_FILE
+fi
+```
 
 ### SQL
 
