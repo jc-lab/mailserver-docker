@@ -144,6 +144,16 @@ EOF
 	chmod 440 $TEMP_SECRET_DKIM_DIR/default.priv.key
 fi
 
+if [ -n "$CUSTOM_FS_OVERRIDE_DIR" ]; then
+	cp -rf $CUSTOM_FS_OVERRIDE_DIR/* /
+fi
+
+if [ -x "$CUSTOM_INIT_SCRIPT_FILE" ]; then
+	$CUSTOM_INIT_SCRIPT_FILE
+elif [ -n "$CUSTOM_INIT_SCRIPT_FILE" ]; then
+	. $CUSTOM_INIT_SCRIPT_FILE
+fi
+
 chown vmail:vmail -R /mail-storage/
 
 /usr/sbin/syslog-ng
