@@ -1,5 +1,8 @@
 ### Version history
 
+#### 0.1.10
+* Add packages for sasl authentication: libsasl cyrus-sasl-plain cyrus-sasl-ntlm cyrus-sasl-gssapiv2
+
 #### 0.1.9
 * Support customization (CUSTOM_FS_OVERRIDE_DIR, CUSTOM_INIT_SCRIPT_FILE)
 
