@@ -6,7 +6,8 @@ RUN adduser -D -g vmail -u 11000 vmail && \
     chown vmail:vmail -R /mail-storage && \
     mkdir -p /secret
 
-RUN apk add bash procps mariadb-client postfix postfix-mysql postfix-pcre dovecot dovecot-sql dovecot-pop3d dovecot-mysql dovecot-lmtpd syslog-ng opendkim opendkim-utils
+RUN apk add bash procps mariadb-client postfix postfix-mysql postfix-pcre dovecot dovecot-sql dovecot-pop3d dovecot-mysql dovecot-lmtpd syslog-ng opendkim opendkim-utils \
+            libsasl cyrus-sasl-plain cyrus-sasl-ntlm cyrus-sasl-gssapiv2
 
 RUN touch /etc/postfix/sasl_passwd && postmap /etc/postfix/sasl_passwd
 
