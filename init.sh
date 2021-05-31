@@ -161,6 +161,9 @@ chown vmail:vmail -R /mail-storage/
 /usr/sbin/dovecot
 /usr/sbin/postfix start
 
+/tls-reloader.sh &
+[ "x$USE_DKIM" = "xy" ] && /dkim-reloader.sh &
+
 while true
 do
 	rc_postfix=1
@@ -192,7 +195,7 @@ do
 		echo "DOVECOT CHECK RET : $rc_dovecot"
 		exit 1
 	fi
-	sleep 1
+	sleep 5
 done
 
 exit 0
