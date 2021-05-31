@@ -6,15 +6,17 @@ RUN adduser -D -g vmail -u 11000 vmail && \
     chown vmail:vmail -R /mail-storage && \
     mkdir -p /secret
 
-RUN apk add bash procps mariadb-client postfix postfix-mysql postfix-pcre dovecot dovecot-sql dovecot-pop3d dovecot-mysql dovecot-lmtpd syslog-ng opendkim opendkim-utils \
-            libsasl cyrus-sasl-plain cyrus-sasl-ntlm cyrus-sasl-gssapiv2
+RUN apk add \
+    bash procps mariadb-client postfix postfix-mysql postfix-pcre dovecot dovecot-sql dovecot-pop3d dovecot-mysql dovecot-lmtpd syslog-ng opendkim opendkim-utils \
+    libsasl cyrus-sasl-plain cyrus-sasl-ntlm cyrus-sasl-gssapiv2 \
+    inotify-tools
 
 RUN touch /etc/postfix/sasl_passwd && postmap /etc/postfix/sasl_passwd
 
 COPY ["template", "/template"]
-COPY ["init.sh", "/"]
+COPY ["init.sh", "tls-reloader.sh", "dkim-reloader.sh", "/"]
 
-RUN chmod +x /init.sh && \
+RUN chmod +x /*.sh && \
     touch /etc/postfix/sasl_passwd && \
     postmap /etc/postfix/sasl_passwd && \
     rm -f /var/log/auth.log /var/log/error.log /var/log/boot.log /var/log/cron.log /var/log/kern.log /var/log/mail.log /var/log/messages && \

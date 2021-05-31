@@ -1,5 +1,8 @@
 ### Version history
 
+#### 0.1.11
+* Watch secret directoryand reload
+
 #### 0.1.10
 * Add packages for sasl authentication: libsasl cyrus-sasl-plain cyrus-sasl-ntlm cyrus-sasl-gssapiv2
 
